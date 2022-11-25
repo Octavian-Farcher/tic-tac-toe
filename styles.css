@@ -1,0 +1,150 @@
+*,*::after,*::after{ /* with this line we select everything before and after */
+box-sizing: border-box;
+}
+body{
+    margin:0;
+}
+:root{ /* is the html selector */
+    --cell-size:100px;
+    --mark-size: calc(var(--cell-size) * .9); 
+}
+
+.board{
+    width: 100vw;
+    height: 100vh;
+    display:grid;
+    justify-content: center; /* in the next 3 lines we center all our board in the website */
+    align-content: center;
+    justify-items:center ;
+    align-items: center;
+    grid-template-columns: repeat(3, auto) ; /* the first value specifies the#
+    number of columns and the 2nd specifies the width of the column */
+}
+
+
+
+.cell{ /* general cell */
+    width: var(--cell-size);
+    height: var(--cell-size);
+    border: 1px solid #000;
+    display:flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    cursor: pointer;
+}
+.cell.x, /* if it s an x or o inside displays not allowed */
+.cell.circle{
+    cursor:not-allowed
+}
+
+.cell:nth-child(n+1){ /* on this line we eliminate all the borders on the top of n+1 which is cell 1, then 2, then 3 */
+    border-top: none;
+}
+.cell:nth-child(3n + 1){ /* on this line we eliminate all the borders on the left from 0+1, 3+1, 6+1 */ 
+    border-left: none;
+}
+.cell:nth-child(3n + 3){ /* on this line we eliminate all the borders on the right (you get the idea) */
+    border-right:none ;
+}
+.cell:last-child,  /* on this line we eliminate all the borders on the bottom */
+.cell:nth-child(8),
+.cell:nth-child(7){
+    border-bottom: none;
+}
+
+.cell.x::before,
+.cell.x::after,
+.cell.circle::before{
+background-color: #000;
+}
+
+/* X */
+.board.x .cell:not(.x):not(.circle):hover::before,
+.board.x .cell:not(.x):not(.circle):hover::after,
+.board.circle .cell:not(.x):not(circle):hover::before{
+background-color: lightgrey;
+}
+
+.cell.x::before , /* cells before and after */
+.cell.x::after,
+.board.x .cell:not(.x):not(.circle):hover::before, /*the :not(.x/.circle) says that it will appear on hover only if it s not an x or an 0 inside the cell */
+.board.x .cell:not(.x):not(.circle):hover::after {
+    content: '';
+    position: absolute; /* position absolute so they dont overflow */ 
+    width: calc(var(--mark-size) * .15);
+    height: var(--mark-size);
+    
+    
+}
+.cell.x::before,
+.board.x .cell:not(.x):not(.circle):hover::before
+{
+    transform: rotate(45deg);
+}
+.cell.x::after,
+.board.x .cell:not(.x):not(.circle):hover::after{    
+    transform: rotate(-45deg)
+}
+/* circle */
+.board.circle .cell:not(.x):not(.circle):hover::before,
+.board.circle .cell:not(.x):not(.circle):hover::after{
+    background-color: lightgray;
+}
+.cell.circle::before,
+.cell.circle::after,
+.board.circle .cell:not(.x):not(.circle):hover::before,
+.board.circle .cell:not(.x):not(.circle):hover::after{
+    content: '';
+    position: absolute;
+    border-radius: 50%;
+}
+.cell.circle::before,
+.board.circle .cell:not(.x):not(.circle):hover::before  {
+    
+    width: var(--mark-size);
+    height: var(--mark-size);
+     
+}
+
+.cell.circle::after,
+.board.circle .cell:not(.x):not(.circle):hover::after {
+    
+    width:calc(var(--mark-size) * .7);
+    height: calc(var(--mark-size) * .7);
+    background-color:white ; 
+}
+/* winning message */
+
+.winning-message{ /*background */
+    display: none;
+    position: fixed;
+    top:0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color:rgba(0, 0, 0, .9);
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    color: aliceblue;
+    font-size: 5rem;
+    
+}
+.winning-message button{
+    font-size: 3rem;
+    background-color: white;
+    border: 1px solid black;
+    cursor: pointer;
+    border-radius: 100%;
+    padding: .7rem;
+}
+.winning-message button:hover{
+border-color: white;
+background-color: black;
+color: white;
+}
+
+.winning-message.show{
+    display: flex;
+}
